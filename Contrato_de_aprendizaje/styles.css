@@ -1,0 +1,112 @@
+body {
+    background: #dadada;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.paper {
+    background: white;
+    width: 800px;
+    margin: 20px auto;
+    padding: 40px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.15);
+    border-radius: 4px;
+}
+
+.title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.no-list-style {
+    list-style: none;
+}
+
+.rules-list li {
+    margin-bottom: 6px;
+}
+
+.info-table {
+    margin: 0 auto;
+    text-align: left;
+}
+
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.styled-table td {
+    border: 1px solid black;
+    padding: 6px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.styled-table tr td:first-child {
+    font-weight: bold;
+}
+
+.calendar-table td {
+    padding: 0px 20px 10px 0px;
+}
+
+.signature-table {
+    padding: 6px 10px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.signature-table td {
+    padding: 8px 20px;
+}
+
+.signature-footer {
+    margin-top: 100px;
+    text-align: center;
+}
+
+.btn-download {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: red;
+}
+
+#contract-content {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
+    background: white;
+    margin: auto;
+}
+
+@page {
+    size: A4;
+    margin: 0;
+}
+
+@media print {
+    body {
+        visibility: hidden;
+    }
+
+    #contract-content {
+        visibility: visible;
+        position: absolute;
+        left: 0;
+        top: 0;
+    }
+
+    #download-button {
+        display: none !important;
+    }
+
+    /* Evita que las tablas se corten */
+    table, tr, td, th {
+        page-break-inside: avoid;
+    }
+}
