@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update user</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <div class="main-container">
+        <header>
+            <h1>Update user</h1>
+            <p>Modifying data in Docker</p>
+        </header>
+        <section class="form-section">
+            {% if user %}
+            <form class="user-form" action="{{ url_for('update_user') }}" method="POST">
+                <div class="form-group">
+                    <label for="id">ID:</label>
+                    <input type="number" id="id" name="id" value="{{ user.id }}" readonly style="background-color: #ddd;">
+                </div>
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" value="{{ user.name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" id="age" name="age" value="{{ user.age }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="aka">Alias (AKA):</label>
+                    <input type="text" id="aka" name="aka" value="{{ user.aka }}" required>
+                </div>
+                <button type="submit" class="btn-add" style="background-color: #f39c12;">Update</button>
+            </form>
+            {% else %}
+            <p>User not found</p>
+            {% endif %}
+            <br>
+            <a href="{{ url_for('index') }}" style="text-decoration: none; color: #2c3e50;">&larr;Go back</a>
+        </section>
+    </div>
+</body>
+</html>
