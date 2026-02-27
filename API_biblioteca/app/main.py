@@ -122,7 +122,7 @@ def available_books():
     return result
 
 # BUSCAR UN LIBRO POR SU NOMBRE
-@app.get("/books/search", response_model=List[BookOut])
+@app.get("/books/search", response_model = List[BookOut])
 def search_by_name(name: str = Query(..., min_length = 1, description = "Nombre parcial o completo")):
     name_lower = name.lower()
     result = []
@@ -159,6 +159,24 @@ def register_loan(loan: CreateLoan):
     }
     loans_list.append(new_loan)
     return LoanOut(**new_loan)
+
+# BUSCAR UN PRÉSTAMO POR EL NOMBRE DEL USUARIO
+@app.get("/loans/search", response_model = List[LoanOut])
+def search_by_user(user: str = Query(..., min_length = 1, description = "Nombre parcial o completo del usuario")):
+    user_lower = user.lower()
+    result = []
+    for loan in loans_list:
+        if user_lower in loan["user_name"].lower():
+            result.append(LoanOut(
+                id = loan["id"], 
+                book_id = loan["book_id"], 
+                user_name = user_lower, 
+                loan_date = loan["loan_date"], 
+                return_date = loan["return_date"]
+            ))
+    if not result:
+        pass
+    return result
 
 # REGRESAR UN LIBRO
 @app.put("/loans/{loan_id}/return", status_code = status.HTTP_200_OK)
