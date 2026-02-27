@@ -1,0 +1,17 @@
+services:
+  biblioteca-api:
+    build: .
+    container_name: biblioteca-api
+    ports:
+      - "5100:80"
+    environment:
+      - PORT=80
+      - ENVIRONMENT=development
+      - DEBUG=true
+    restart: unless-stopped
+    networks:
+      - biblioteca-network
+
+networks:
+  biblioteca-network:
+    driver: bridge
