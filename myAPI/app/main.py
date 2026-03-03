@@ -2,10 +2,12 @@
 # | IMPORTACIONES |
 # -----------------
 
-from typing import Optional
-from fastapi import FastAPI, status, HTTPException
-from pydantic import BaseModel, Field
 import asyncio
+import secrets
+from typing import Optional
+from fastapi import FastAPI, status, HTTPException, Depends
+from pydantic import BaseModel, Field
+from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 
 # --------------------------------------
@@ -23,7 +25,7 @@ users = [
     {"id": 1, "name": "Daniela Lisset Elizalde Ortiz", "age": 20, "aka": "The most beautiful girl ihesimel"}, 
     {"id": 2, "name": "Gabriela Martínez Cruz", "age": 22, "aka": "My loyal friend"}, 
     {"id": 3, "name": "Alan David Santiago de Vicente", "age": 21, "aka": "The BOMB"},
-    {"id": 4, "name": "Ian David Rodríguez Ruiz", "age": 21, "aka": "Gay therian"}
+    {"id": 4, "name": "Ian David Rodríguez Ruiz", "age": 21, "aka": "Straight therian"}
 ]
 
 
@@ -36,6 +38,25 @@ class UserBase(BaseModel):
     name: str = Field(..., min_length = 3, max_length = 255, description = "User name", examples = ["Isaac Abdiel Sánchez López"])
     age: int = Field(..., ge = 0, le = 121, description = "Valid age between 0 and 121", examples = [20])
     aka: str = Field(..., min_length = 3, max_length = 50, description = "User nickname", examples = ["The GOAT"])
+
+
+# ----------------------------
+# | SEGURIDAD CON HTTP BASIC |
+# ----------------------------
+
+# INICIALIZAR LA INSTANCIA CON "HTTPBasic"
+security = HTTPBasic()
+
+def verify_request(credentials: HTTPBasicCredentials = Depends(security)):
+    auth_user = secrets.compare_digest(credentials.username, "PolisTP98")
+    auth_pass = secrets.compare_digest(credentials.password, "PolisTP98")
+
+    if not(auth_user and auth_pass):
+        raise HTTPException(
+            status_code = status.HTTP_401_UNAUTHORIZED, 
+            detail = "Invalid credentials", 
+        )
+    return credentials.username
 
 
 # -------------
@@ -122,7 +143,7 @@ async def update_user(id: int, user_updated: dict):
 
 # ENDPOINT "eliminar_usuario" (DELETE)
 @app.delete("/v1/users/{id}", tags = ["users_CRUD"], status_code = status.HTTP_204_NO_CONTENT)
-async def delete_user(id: int):
+async def delete_user(id: int, auth_user: str = Depends(verify_request)):
     for index, usr in enumerate(users):
         if usr["id"] == id:
             # ELIMINA AL USUARIO DE LA LISTA
