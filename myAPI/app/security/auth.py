@@ -1,6 +1,11 @@
+# ----------------------------
+# | IMPORTACIONES NECESARIAS |
+# ----------------------------
+
 import secrets
 from fastapi import status, HTTPException, Depends
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+
 
 # ----------------------------
 # | SEGURIDAD CON HTTP BASIC |
